@@ -1,6 +1,8 @@
 package com.mycompany.mavenproject1;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -18,9 +21,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+        // Elements that arrange parts of the scene.
         var root = new BorderPane();
         var grid = new GridPane();
         
+        // Elements placed on the scene.
         var firstName = new Label("First Name:");
         var lastName = new Label("Last Name:");
         var email = new Label("Email:");
@@ -34,13 +39,12 @@ public class App extends Application {
         
         var register = new Button("Register");
         register.setDisable(true);
-        if (firstNameText.getText().isEmpty() && lastNameText.getText().isEmpty() && emailText.getText().isEmpty() && passwordText.getText().isEmpty()) {
-            register.setDisable(false);
-        }
+        
         var clear = new Button("Clear");
         
         var check = new Label("");
         
+        // Functionality of register button, including checking for a valid email & password.
         register.setOnAction(e -> {
             Boolean emailCheck = false;
             Boolean digitCheck = false;
@@ -60,24 +64,15 @@ public class App extends Application {
                 }
             }
             
-            for (int b = 0; b < emailText.getText().length() && (digitCheck == false || characterCheck == false); b++) {
-                if (digits.contains(passwordText.getText().substring(b, b + 1))) {
-                    digitCheck = true;
+            for (int b = 0; b < passwordText.getText().length() && (digitCheck == false || characterCheck == false); b++) {
+                    if (digits.contains(passwordText.getText().charAt(b) + "")) {
+                        digitCheck = true;
+                    }
+                    if (letters.contains(passwordText.getText().charAt(b) + "")) {
+                        characterCheck = true;
+                    }
                 }
-                if (letters.contains(passwordText.getText().substring(b, b + 1))) {
-                    characterCheck = true;
-                }
-            }
-            
-            if (emailCheck == true) {
-                System.out.println("email good");
-            }
-            if (digitCheck == true) {
-                System.out.println("digit good");
-            }
-            if (characterCheck == true) {
-                System.out.println("character good");
-            }
+           
             if (emailCheck == true && digitCheck == true && characterCheck == true) {
                 check.setText("Your account has been registered.");
             } else {
@@ -85,6 +80,25 @@ public class App extends Application {
             }
         });
         
+        // Functionality of clear button
+        clear.setOnAction(e -> {
+            firstNameText.setText("");
+            lastNameText.setText("");
+            emailText.setText("");
+            passwordText.setText("");
+            register.setDisable(true);
+        });
+        
+        // Functionality of checking if the register button should be enabled or disabled
+        root.setOnKeyReleased(e -> {
+            if (!(firstNameText.getText().isEmpty() || lastNameText.getText().isEmpty() || emailText.getText().isEmpty() || passwordText.getText().isEmpty())) {
+                register.setDisable(false);
+            } else {
+                register.setDisable(true);
+            }
+        });
+        
+        // Adding elements to the grid
         root.setCenter(grid);
         grid.add(firstName, 0, 0);
         grid.add(lastName, 0, 1);
@@ -96,9 +110,24 @@ public class App extends Application {
         grid.add(passwordText, 1, 3);
         grid.add(register, 0, 4);
         grid.add(clear, 1, 4);
-        grid.add(check, 0, 5);
-        var scene = new Scene(root, 640, 480);
+        
+        // Making the grid look good
+        grid.setAlignment(Pos.TOP_LEFT);
+        grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        // Putting the registration check label outside the grid makes sure it doesn't mess with the grid
+        root.setBottom(check);
+        check.setAlignment(Pos.TOP_CENTER);
+        check.setTextAlignment(TextAlignment.CENTER);
+        check.setWrapText(true);
+        check.setPadding(new Insets(30, 30, 30, 30));
+        
+        
+        var scene = new Scene(root, 400, 400);
         stage.setScene(scene);
+        stage.setTitle("Account Creation:");
         stage.show();
     }
 
