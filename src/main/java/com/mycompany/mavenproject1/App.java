@@ -30,11 +30,29 @@ public class App extends Application {
         var lastNameText = new TextField();
         var emailText = new TextField();
         var passwordText = new PasswordField();
+  
         
         var register = new Button("Register");
+        register.setDisable(true);
+        if (firstNameText.getText() != "" && lastNameText.getText() != "" && emailText.getText() != "" && passwordText.getText() != "") {
+            register.setDisable(false);
+        }
+        Boolean digit = false;
+        Boolean character = false;
+        String letters = "abcdefghijklmnopqrstuvwxyz";
+        String digits = "0123456789";
+        register.setOnAction(e -> {
+            if ((emailText.getText().contains("@") && emailText.getText().contains(".c"))) {
+            for (int a = 0; a < emailText.getText().length(); a++) {
+                
+            }
+        }
+        });
         var clear = new Button("Clear");
         
-        var check = new Label(" ");
+        var check = new Label("");
+        
+        
         
         var scene = new Scene(root, 640, 480);
         stage.setScene(scene);
